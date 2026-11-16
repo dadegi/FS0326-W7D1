@@ -8,14 +8,9 @@ const newFrequency = document.querySelector('#newFrequency');
 const newStudents = [];
 
 class Student {
-	constructor(
-		_studentID,
-		_studentName,
-		_studentSurname,
-		_studentAge,
-		_frequency,
-	) {
-		this.studentId = _studentID;
+	#id; // INCAPSULAMENTO: La variabile esiste ESCLUSIVAMENTE all'interno della classe, può essere definita e letta ESCLUSIVAMENTE dentro la classe (vedi this.#id a riga 27)
+	constructor(_studentName, _studentSurname, _studentAge, _frequency) {
+		this.#id = crypto.randomUUID();
 		this.studentName = _studentName;
 		this.studentSurname = _studentSurname;
 		this.studentAge = _studentAge;
@@ -29,7 +24,7 @@ class Student {
 	printStudent() {
 		const isFrequency = this.frequency ? 'Sì' : 'No';
 		const newLi = document.createElement('li');
-		newLi.textContent += `Student ${this.studentName} ${this.studentSurname} di anni ${this.studentAge}, frequentante: ${isFrequency}, ID studente: ${this.studentId}`;
+		newLi.textContent += `Student ${this.studentName} ${this.studentSurname} di anni ${this.studentAge}, frequentante: ${isFrequency}, ID studente: ${this.#id}`;
 		studentList.appendChild(newLi);
 	}
 }
@@ -37,7 +32,6 @@ class Student {
 registerForm.addEventListener('submit', (e) => {
 	e.preventDefault();
 	const newStudent = new Student(
-		crypto.randomUUID(),
 		newName.value,
 		newSurname.value,
 		newAge.value,
@@ -115,7 +109,10 @@ class Music {
 		this.title = _title;
 		this.author = _author;
 		this.year = _year;
-		this.music = `Il disco ${this.title} di ${this.author} del ${this.year}`;
+	}
+
+	print() {
+		return `Il disco ${this.title} di ${this.author} del ${this.year}`;
 	}
 }
 
@@ -126,8 +123,8 @@ class Vynil extends Music {
 	}
 
 	print() {
-		console.log(
-			this.music + ` è in formato vinile di grandezza ${this.length}"`,
+		return (
+			super.print() + ` è in formato vinile di grandezza ${this.length}"`
 		);
 	}
 }
@@ -139,7 +136,7 @@ class CompactDisc extends Music {
 	}
 
 	print() {
-		console.log(this.music + ` è in formato CD ${this.format}`);
+		return super.print() + ` è in formato CD ${this.format}`;
 	}
 }
 
@@ -150,18 +147,18 @@ class Digital extends Music {
 		this.dimension = _dimension;
 	}
 	print() {
-		console.log(
-			this.music +
-				` è in formato digitale ${this.format} di dimensioni ${this.dimension}`,
+		return (
+			super.print() +
+			` è in formato digitale ${this.format} di dimensioni ${this.dimension}`
 		);
 	}
 }
 
 const myVynil1 = new Vynil('The Wall', 'Pink Floyd', 1978, '33');
-myVynil1.print();
+console.log(myVynil1.print());
 
 const myCD1 = new CompactDisc('AfterMath', 'Rolling Stones', 1967, 'SACD');
-myCD1.print();
+console.log(myCD1.print());
 
 const myDigital1 = new Digital(
 	'Space Cowboy',
@@ -170,4 +167,4 @@ const myDigital1 = new Digital(
 	'FLAC',
 	'240MB',
 );
-myDigital1.print();
+console.log(myDigital1.print());
